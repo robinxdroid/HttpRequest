@@ -23,48 +23,40 @@
     17 强大的缓存策略，适应多种场景
 
 ### About cache ###
+二级缓存，内存缓存与磁盘缓存，内存缓存使用LruCache,磁盘缓存使用DiskLruCache，均为LRU策略
+ 
 框架中会有个```RequestCacheOptions```对象，此对象包含所有的请求缓存相关配置，每个请求对应一个，在在发起请求时传入，此对象包含如下配置：   
-1 二级缓存，内存缓存与磁盘缓存，内存缓存使用LruCache,磁盘缓存使用DiskLruCache，均为LRU策略，不会担心内存满了的问题  
-2  
-```java
+1  ```java
 setShouldCache(true)
-```  
-这个开关控制是否使用缓存的功能  
-3
-```java
+```  这个开关控制是否使用缓存的功能
+  
+2```java
 setUseCacheDataAnyway(false)
-``` 
-是否总是使用缓存，这个开关开启后，将每次首先从内存和本地查找缓存，有的话直接使用缓存，请求会在后台执行，完成后会更新缓存。如果没有缓存将直接进行网络请求获取，完成后会更新缓存.  
-4 
-```java
+``` 是否总是使用缓存，这个开关开启后，将每次首先从内存和本地查找缓存，有的话直接使用缓存，请求会在后台执行，完成后会更新缓存。如果没有缓存将直接进行网络请求获取，完成后会更新缓存.
+  
+3 ```java
 setUseCacheDataWhenRequestFailed(true)
-```
-是否在请求失败后使用缓存数据，无网络属于请求失败，可以保证即使没有网络，或者请求失败也有数据展示.  
-5 
-```java
+```是否在请求失败后使用缓存数据，无网络属于请求失败，可以保证即使没有网络，或者请求失败也有数据展示.
+  
+5 ```java
 setUseCacheDataWhenTimeout(true)
-``` 
-是否在请求超时后直接使用缓存，这里的超时时间并不是网络请求的超时时间，而是我们设定一个时间，超过这个时间后，不管请求有没有完成都直接使用缓存，后台的请求完成后会自动更新缓存  
-6 
-```java
+``` 是否在请求超时后直接使用缓存，这里的超时时间并不是网络请求的超时时间，而是我们设定一个时间，超过这个时间后，不管请求有没有完成都直接使用缓存，后台的请求完成后会自动更新缓存
+  
+6 ```java
 setUseCacheDataWhenUnexpired(true)
-``` 
-是否使用缓存当缓存未过期的时候，这个开关也是经常开启的开关，每个缓存都会对应一个过期时间，先从内存查找缓存，没有的话再从磁盘查找，有缓存且未过期的话，将直接使用缓存数据，当过期之后会进行网络请求，请求完成后会更新内存缓存与磁盘。没有缓存将直接进行网络请求，请求完成后会更新内存与磁盘缓存   
-7 
-```java
+``` 是否使用缓存当缓存未过期的时候，这个开关也是经常开启的开关，每个缓存都会对应一个过期时间，先从内存查找缓存，没有的话再从磁盘查找，有缓存且未过期的话，将直接使用缓存数据，当过期之后会进行网络请求，请求完成后会更新内存缓存与磁盘。没有缓存将直接进行网络请求，请求完成后会更新内存与磁盘缓存
+   
+7 ```java
 setRetryWhenRequestFailed(true)
-``` 
-是否进行重试，当请求失败的时候，默认开启，重试2次，不需要重试功能的话可关闭   
-8 
-```java
+``` 是否进行重试，当请求失败的时候，默认开启，重试2次，不需要重试功能的话可关闭
+   
+8 ```java
 setNeverExpired(false)
-``` 
-设置缓存是否永不过期    
-9 
-```java
+``` 设置缓存是否永不过期
+    
+9 ```java
 setTimeController
-``` 
-设置时间控制器
+``` 设置时间控制器
 
 
 
@@ -74,8 +66,8 @@ setTimeController
 
 ### Screenshot ###
 
-![](https://raw.githubusercontent.com/robinxdroid/XDroidRequest/master/1.jpg) 
-![](https://raw.githubusercontent.com/robinxdroid/XDroidRequest/master/2.jpg) 
+![](https://github.com/robinxdroid/HttpRequest/blob/master/1.png) 
+![](https://github.com/robinxdroid/HttpRequest/blob/master/2.png) 
 
 ### Usage ###
 
@@ -398,6 +390,7 @@ HttpRequest request = new MultipartRequest.Builder()
                 .build();
 ```
 **8.其他请求示例（列举两个，其他请查看Demo）**：
+
 (1)同步请求
 ```java
 		SyncRequest<String> syncRequest = SyncRequest.newSyncRequest();
@@ -435,6 +428,7 @@ RequestParams params = new RequestParams();
 ```
 测试了上传百兆以上文件无压力，如果你想测试多文件上传，下面的PHP多文件上传代码供参考。要注意的是PHP默认上传2M以内文件，需要自己改下
 配置文件，网上很多，搜索即可
+
 ```java
 <?php
  foreach($_FILES['file']['error'] as $k=>$v)
