@@ -276,14 +276,13 @@ DiskCache.INSTANCE.clear();
 **4.请求配置**：
 
 在发送请求的时候，有的重载函数需要传入一个```RequestCacheOptions```对象（见Demo项目），不需要传入此对象的重载函数内部传入的是默认的
-```RequestCacheOptions```对象，通过```RequestCacheOptions```对象控制缓存于网络数据等<br> 
+```RequestCacheOptions```对象，通过```RequestCacheOptions```对象控制缓存于网络数据等 
      
 ```java
-		HttpRequest request = new MultipartRequest.Builder()
-                .requestCacheOptions(RequestCacheOptions.buildAllCloseOptions())
-                ...
-                .build();
-```   
+HttpRequest request = new MultipartRequest.Builder()
+        .requestCacheOptions(RequestCacheOptions.buildAllCloseOptions())
+        ...
+        .build();```
 
 每次请求如果需要重新指定配置，自己构造这样一个对象传入即可   
 
