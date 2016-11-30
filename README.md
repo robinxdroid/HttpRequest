@@ -257,14 +257,17 @@ XRequest.getInstance().sendGet(mRequestTag, url, cacheKey, params, new OnRequest
 ```java
 long diskCacheCurrentSize = DiskCache.INSTANCE.getCurrentSize();
 ```
+
 (3)查找缓存路径
 ```java
 String diskCacheDir = DiskCache.INSTANCE.getDirectory().getPath();
 ```
+
 (4)查询当前缓存最大值
 ```java
 long diskCacheMaxSize = DiskCache.INSTANCE.getMaxSize();
 ```
+
 (5)清除所有缓存
 ```java
 DiskCache.INSTANCE.clear();
@@ -276,16 +279,17 @@ DiskCache.INSTANCE.clear();
 ```RequestCacheOptions```对象，通过```RequestCacheOptions```对象控制缓存于网络数据等<br> 
      
 ```java
-HttpRequest request = new MultipartRequest.Builder()
+		HttpRequest request = new MultipartRequest.Builder()
                 .requestCacheOptions(RequestCacheOptions.buildAllCloseOptions())
                 ...
                 .build();
-
 ```   
 
 每次请求如果需要重新指定配置，自己构造这样一个对象传入即可   
 
-```RequestCacheOptions```默认实现供参考：<br>   
+```java
+RequestCacheOptions
+```默认实现供参考：<br>   
  
 ```java
 public static RequestCacheOptions buildDefaultCacheOptions() {
