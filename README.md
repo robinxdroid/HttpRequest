@@ -1,10 +1,10 @@
 ## XDroidRequest ##
 
-**XDroidRequest** 已更名“HttpRequest”,重构更新，高度解耦，支持了OKHttp，自由选择，多种JSON解析器可选（GSON,Fastjson,JackSon），并能自己再拓展，并且对缓存模块进行了重构，以及其他模块代码优化。
+**XDroidRequest** 已更名“HttpRequest”,重构更新，高度解耦，支持了OKHttp，可自由选择，多种JSON解析器可选（GSON,Fastjson,JackSon），并能自己再拓展，对缓存模块进行了重构，以及其他模块代码优化。
 
 ### Provide ###
     
-    1 不再使用HttpClient相关API，跟随Android 6.0，默认使用HttpURLConnection
+    1 移除HttpClient相关API
     2 支持OKHttp,自由选择
     3 8种网络请求方式 GET，POST，PUT，DELETE，HEAD，OPTIONS，TRACE，PATCH
     4 请求的优先级设置，优先级高的将先于优先级低的发送请求
@@ -25,31 +25,52 @@
 ### About cache ###
 框架中会有个```RequestCacheOptions```对象，此对象包含所有的请求缓存相关配置，每个请求对应一个，在在发起请求时传入，此对象包含如下配置：   
 1 二级缓存，内存缓存与磁盘缓存，内存缓存使用LruCache,磁盘缓存使用DiskLruCache，均为LRU策略，不会担心内存满了的问题  
-2  ```
+2  
+```java
 setShouldCache(true)
-```  这个开关控制是否使用缓存的功能  
+```  
+这个开关控制是否使用缓存的功能  
 3
-```
+```java
 setUseCacheDataAnyway(false)
 ``` 
 是否总是使用缓存，这个开关开启后，将每次首先从内存和本地查找缓存，有的话直接使用缓存，请求会在后台执行，完成后会更新缓存。如果没有缓存将直接进行网络请求获取，完成后会更新缓存.  
 4 
-```
+```java
 setUseCacheDataWhenRequestFailed(true)
 ```
 是否在请求失败后使用缓存数据，无网络属于请求失败，可以保证即使没有网络，或者请求失败也有数据展示.  
-5 ```setUseCacheDataWhenTimeout(true)``` 是否在请求超时后直接使用缓存，这里的超时时间并不是网络请求的超时时间，而是我们
-    设定一个时间，超过这个时间后，不管请求有没有完成都直接使用缓存，后台的请求完成后会自动更新缓存  
-6 ```setUseCacheDataWhenUnexpired(true)``` 是否使用缓存当缓存未过期的时候，这个开关也是经常开启的开关，每个缓存都会对应一个过期时间，先从内存查找缓存，没有的话再从磁盘查找，有缓存且未过期的话，将直接使用缓存数据，当过期之后会进行网络请求，请求完成后会更新内存缓存与磁盘。没有缓存将直接进行网络请求，请求完成后会更新内存与磁盘缓存   
-7 ```setRetryWhenRequestFailed(true)``` 是否进行重试，当请求失败的时候，默认开启，重试2次，不需要重试功能的话可关闭   
-8 ```setNeverExpired(false)``` 设置缓存是否永不过期    
-9 ```setTimeController``` 设置时间控制器
+5 
+```java
+setUseCacheDataWhenTimeout(true)
+``` 
+是否在请求超时后直接使用缓存，这里的超时时间并不是网络请求的超时时间，而是我们设定一个时间，超过这个时间后，不管请求有没有完成都直接使用缓存，后台的请求完成后会自动更新缓存  
+6 
+```java
+setUseCacheDataWhenUnexpired(true)
+``` 
+是否使用缓存当缓存未过期的时候，这个开关也是经常开启的开关，每个缓存都会对应一个过期时间，先从内存查找缓存，没有的话再从磁盘查找，有缓存且未过期的话，将直接使用缓存数据，当过期之后会进行网络请求，请求完成后会更新内存缓存与磁盘。没有缓存将直接进行网络请求，请求完成后会更新内存与磁盘缓存   
+7 
+```java
+setRetryWhenRequestFailed(true)
+``` 
+是否进行重试，当请求失败的时候，默认开启，重试2次，不需要重试功能的话可关闭   
+8 
+```java
+setNeverExpired(false)
+``` 
+设置缓存是否永不过期    
+9 
+```java
+setTimeController
+``` 
+设置时间控制器
 
 
 
 ### Example ###
 
-[Download demo.apk](https://github.com/robinxdroid/XDroidRequest/blob/master/XDroidRequestExample.apk?raw=true)
+[Download demo.apk](https://github.com/robinxdroid/HttpRequest/blob/master/XDroidRequestExample.apk?raw=true)
 
 ### Screenshot ###
 
@@ -59,8 +80,22 @@ setUseCacheDataWhenRequestFailed(true)
 ### Usage ###
 
 Gradle:
+```bash
+compile 'net.robinx:lib.http:1.0.2'
+compile 'com.google.code.gson:gson:2.6.2'  //默认解析使用的gson
 ```
-compile 'net.robinx:lib.http:1.0.0'
+
+需要使用OKHTTP的话添加下面的依赖：
+```bash
+compile 'net.robinx:lib.http.okhttpsupport:1.0.0'
+compile 'com.squareup.okhttp3:okhttp:3.2.0'  //okhttp3
+```
+
+需要自定义解析方式添加下面的依赖：
+```bash
+compile 'net.robinx:lib.http.converters:1.0.0'
+compile 'com.fasterxml.jackson.core:jackson-databind:2.7.4'  //jackson
+compile 'com.alibaba:fastjson:1.2.11' //fastjson
 ```
 
 **1.初始化，应用启动的时候进行，主要初始化缓存的路径上下文等信息。**
@@ -74,31 +109,30 @@ XRequest.initXRequest(getApplicationContext());
 
 **2.发起请求**
 
-① GET请求
+① 请求
 ```java
-	RequestParams params = new RequestParams();
+		RequestParams params = new RequestParams();
         params.putHeaders("apikey", "ae75f7350ede43701ce8a5ad8a161ff9");
         params.putParams("city", "hefei");
 
-        HttpRequest<String> request = new MultipartRequest.Builder<String>()
-                .requestParams(params)  //请求参数
-                .httpMethod(HttpMethod.GET)  //请求方法
-                .url("http://apis.baidu.com/heweather/weather/free") //URL
-                .cacheKey("http://apis.baidu.com/heweather/weather/free") //缓存Key，不指定的话，默认与URL相同 
-                .tag(mRequestTag) //用于取消请求
-                .onRequestListener(getOnGetRequestListener())  //请求回调
-                .body(new OkRequestBody()) //OkRequestBody()或HurlRequestBody()，不指定的话，默认new HurlRequestBody()
-                .build();
-        XRequest.INSTANCE.addToRequestQueue(request);
-		 
+        MultipartRequest.Builder<String> builder = new MultipartRequest.Builder<>();
+        HttpRequest<String> request = builder
+                .requestParams(params)
+                .httpMethod(HttpMethod.GET) //请求方法
+                .url("http://apis.baidu.com/heweather/weather/free") //url
+                .cacheKey("http://apis.baidu.com/heweather/weather/free") //不设置时默认为url
+                .tag(mRequestTag) //tag,用于取消请求的标识
+                .onRequestListener(getOnPostRequestListener()) //回调
+                .body(new HurlRequestBody()) //请求体，不设置时默认为HurlRequestBody(),可设置为okhttp new OkRequestBody()
+                .build()
+                .execute();
 ```
 
 
 **3.请求回调**：
-  回调接口```OnRequestListener```,此回调包含了很多监听，有些回调可能你不要重写，那么只需传入```OnRequestListenerAdapter```
-  选择性复写需要的回调函数即可，这里是```OnRequestListener```的每个回调函数的注释：
+  回调接口```OnRequestListener```,可选回调```OnRequestListenerAdapter```
   
-  ```java
+```java
 XRequest.getInstance().sendGet(mRequestTag, url, cacheKey, params, new OnRequestListener<String>() {
 
 			/**
@@ -226,7 +260,7 @@ XRequest.getInstance().sendGet(mRequestTag, url, cacheKey, params, new OnRequest
 
 **4.缓存配置**：
 
-```
+
 (2)查找当前缓存数据占用的空间
 ```java
 long diskCacheCurrentSize = DiskCache.INSTANCE.getCurrentSize();
@@ -322,12 +356,10 @@ public class FastjsonConverter<T> implements Converter<T> {
 (1).取消请求
 ```java
 // 取消指定请求(两种方式都可以)
- // request.cancel();
 XRequest.INSTANCE.cancelRequest(request);
 
-// 取消队列中的所有相同tag请求(两种方式都可以)
- //request.getRequestQueue().cancelAll(mRequestTag);
- XRequest.INSTANCE.cancelAllRequestInQueueByTag(mRequestTag);
+// 取消队列中的所有相同tag请求
+XRequest.INSTANCE.cancelAllRequestInQueueByTag(mRequestTag);
 ```
 
 (2).框架Log控制
@@ -341,6 +373,21 @@ Clog.openLog();
 Clog.closeLog();
 ```
 
+(3).设置请求优先级
+```java
+HttpRequest request = new MultipartRequest.Builder()
+                .retryPolicy(new DefaultRetryPolicyImpl(DefaultRetryPolicyImpl.DEFAULT_TIMEOUT_MS, DefaultRetryPolicyImpl.DEFAULT_MAX_RETRIES, DefaultRetryPolicyImpl.DEFAULT_BACKOFF_MULT))
+                ...
+                .build();
+```
+(3).切换OKHttp
+```java
+XRequest.INSTANCE.setStack(new OkHttpStack());
+HttpRequest request = new MultipartRequest.Builder()
+                .body(new OkRequestBody())
+                ...
+                .build();
+```
 **8.其他请求示例（列举两个，其他请查看Demo）**：
 
 (1)上传文件
@@ -358,8 +405,8 @@ RequestParams params = new RequestParams();
                 .tag(mRequestTag)
                 .onRequestListener(getOnUploadListener())
                 .body(mOkHttpRadioButton.isChecked()?new OkRequestBody():new HurlRequestBody())
-                .build();
-        XRequest.INSTANCE.addToRequestQueue(request);
+                .build()
+                .execute();
 ```
 测试了上传百兆以上文件无压力，如果你想测试多文件上传，下面的PHP多文件上传代码供参考。要注意的是PHP默认上传2M以内文件，需要自己改下
 配置文件，网上很多，搜索即可
@@ -396,13 +443,12 @@ String downloadPath = "/sdcard/xrequest/download";
                 .tag(mRequestTag)
                 .onRequestListener(getOnDownloadListener())
                 .body(mOkHttpRadioButton.isChecked()?new OkRequestBody():new HurlRequestBody())
-                .build();
-        XRequest.INSTANCE.addToRequestQueue(request);
+                .build()
+                .execute();
 ```
 
-**9.更多**：
+**9.更多请查看demo和阅读源码**：
 
-欢迎自行探索
 
 #Thanks
 [DiskLruCache](https://github.com/JakeWharton/DiskLruCache)<br>
