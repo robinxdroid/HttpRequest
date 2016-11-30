@@ -292,7 +292,7 @@ HttpRequest request = new MultipartRequest.Builder()
 每次请求如果需要重新指定配置，自己构造这样一个对象传入即可   
 
 ```RequestCacheOptions```默认实现供参考：    
-```
+```java
 public static RequestCacheOptions buildDefaultCacheOptions() {
 		RequestCacheOptions options=new RequestCacheOptions.Builder()
                 .shouldCache(true) //开启缓存
@@ -312,7 +312,8 @@ public static RequestCacheOptions buildDefaultCacheOptions() {
 
 **5.自定义解析方式**：
 
-如果需要对请求的结果的解析方式进行自定义拓展，只需实现Converter<T>接口,重写```fromJSONObject```与```fromJSONArray```两个函数即可，参考项目中```GsonConverter```,```FastjsonConverter```   
+如果需要对请求的结果的解析方式进行自定义拓展，只需实现Converter<T>接口,重写```fromJSONObject```与```fromJSONArray```两个函数即可，参考项目中```GsonConverter```,```FastjsonConverter```<br> 
+  
 ```java
 public class FastjsonConverter<T> implements Converter<T> {
 
