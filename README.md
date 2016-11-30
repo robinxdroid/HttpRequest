@@ -389,9 +389,33 @@ HttpRequest request = new MultipartRequest.Builder()
                 ...
                 .build();
 ```
+(4).切换解析器
+```java
+XRequest.INSTANCE.setStack(new OkHttpStack());
+HttpRequest request = new MultipartRequest.Builder()
+                .addConverter(new FastjsonConverter()) //new JackSonConverter()
+                ...
+                .build();
+```
 **8.其他请求示例（列举两个，其他请查看Demo）**：
+(1)同步请求
+```java
+		SyncRequest<String> syncRequest = SyncRequest.newSyncRequest();
+        HttpRequest<String> request = new MultipartRequest.Builder<String>()
+                ...
+                .execute();
 
-(1)上传文件
+        try {
+            String result = syncRequest.get();
+            CLog.i("Sync Request result: %s",result);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+```
+
+(3)上传文件
 ```java
 RequestParams params = new RequestParams();
         params.put("file[0]", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "HTextView.apk"));
@@ -432,7 +456,7 @@ RequestParams params = new RequestParams();
 
 ?>
 ```
-(2)下载文件
+(3)下载文件
 ```java
 String downloadPath = "/sdcard/xrequest/download";
         String fileName = "test.apk";
