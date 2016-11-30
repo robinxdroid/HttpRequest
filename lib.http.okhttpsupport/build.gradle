@@ -1,0 +1,71 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion ANDROID_BUILD_SDK_VERSION as int
+    buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
+
+    defaultConfig {
+        minSdkVersion ANDROID_BUILD_MIN_SDK_VERSION as int
+        targetSdkVersion ANDROID_BUILD_TARGET_SDK_VERSION as int
+        versionCode VERSION_CODE as int
+        versionName VERSION_NAME
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile project(':lib.http')
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+}
+
+//apply from: '../script/gradle-jcenter-push.gradle'
+
+/*//-----------------javadoc编码------------------------
+allprojects {
+    tasks.withType(Javadoc) {
+        options{
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            links "http://docs.oracle.com/javase/7/docs/api"
+        }
+    }
+}
+//-----------------jCenter 配置 begin------------------------
+ext {
+    bintrayRepo = 'RobinMaven'
+    bintrayName = 'HttpOkHttpSupportLibrary'
+
+    publishedGroupId = 'net.robinx'
+    libraryName = 'lib.http.okhttpsupport'
+    artifact = 'lib.http.okhttpsupport'
+
+    libraryDescription = 'Android okhttp support library'
+
+    siteUrl = 'http://git.oschina.net/robinxdroid/HttpRequest'
+    gitUrl = 'https://git.oschina.net/robinxdroid/HttpRequest.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'robinx'
+    developerName = 'robin'
+    developerEmail = 'robinxdroid@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+
+}
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'*/

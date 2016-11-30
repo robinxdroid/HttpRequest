@@ -1,0 +1,79 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion ANDROID_BUILD_SDK_VERSION as int
+    buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
+
+    //如果运行jackson报错，在运行module的build.gradle文件中加入下面代码
+    /*packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }*/
+
+    defaultConfig {
+        minSdkVersion ANDROID_BUILD_MIN_SDK_VERSION as int
+        targetSdkVersion ANDROID_BUILD_TARGET_SDK_VERSION as int
+        versionCode VERSION_CODE as int
+        versionName VERSION_NAME
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile project(':lib.http')
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.4'
+    compile 'com.alibaba:fastjson:1.2.11'
+}
+
+//apply from: '../script/gradle-jcenter-push.gradle'
+
+/*//-----------------javadoc编码------------------------
+allprojects {
+    tasks.withType(Javadoc) {
+        options{
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            links "http://docs.oracle.com/javase/7/docs/api"
+        }
+    }
+}
+//-----------------jCenter 配置 begin------------------------
+ext {
+    bintrayRepo = 'RobinMaven'
+    bintrayName = 'HttpConvertersLibrary'
+
+    publishedGroupId = 'net.robinx'
+    libraryName = 'lib.http.converters'
+    artifact = 'lib.http.converters'
+
+    libraryDescription = 'Android http converters library'
+
+    siteUrl = 'http://git.oschina.net/robinxdroid/HttpRequest'
+    gitUrl = 'https://git.oschina.net/robinxdroid/HttpRequest.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'robinx'
+    developerName = 'robin'
+    developerEmail = 'robinxdroid@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+
+}
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'*/
