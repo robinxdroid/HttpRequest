@@ -3,7 +3,8 @@
 重构更新，高度解耦，支持了OKHttp，可自由选择，多种JSON解析器可选（GSON,Fastjson,JackSon），并能自己再拓展，对缓存模块进行了重构，以及其他模块代码优化。
 
 ### Provide ###
-    
+
+```bash    
     1 移除HttpClient相关API
     2 支持OKHttp,自由选择
     3 8种网络请求方式 GET，POST，PUT，DELETE，HEAD，OPTIONS，TRACE，PATCH
@@ -21,6 +22,7 @@
     15 多种错误类型判定
     16 扩展性强，可自定义发送请求方式与解析请求结果
     17 强大的缓存策略，适应多种场景
+```
 
 ### About cache ###
 二级缓存，内存缓存与磁盘缓存，内存缓存使用LruCache,磁盘缓存使用DiskLruCache，均为LRU策略
@@ -28,37 +30,22 @@
 框架中会有个RequestCacheOptions对象，此对象包含所有的请求缓存相关配置，每个请求对应一个，在在发起请求时传入，此对象包含如下配置：
    
 ```java
-setShouldCache(true)
-```  这个开关控制是否使用缓存的功能
-  
-```java
-setUseCacheDataAnyway(false)
-``` 是否总是使用缓存，这个开关开启后，将每次首先从内存和本地查找缓存，有的话直接使用缓存，请求会在后台执行，完成后会更新缓存。如果没有缓存将直接进行网络请求获取，完成后会更新缓存.
-  
-```java
-setUseCacheDataWhenRequestFailed(true)
-```是否在请求失败后使用缓存数据，无网络属于请求失败，可以保证即使没有网络，或者请求失败也有数据展示.
-  
-```java
-setUseCacheDataWhenTimeout(true)
-``` 是否在请求超时后直接使用缓存，这里的超时时间并不是网络请求的超时时间，而是我们设定一个时间，超过这个时间后，不管请求有没有完成都直接使用缓存，后台的请求完成后会自动更新缓存
-  
-```java
-setUseCacheDataWhenUnexpired(true)
-``` 是否使用缓存当缓存未过期的时候，这个开关也是经常开启的开关，每个缓存都会对应一个过期时间，先从内存查找缓存，没有的话再从磁盘查找，有缓存且未过期的话，将直接使用缓存数据，当过期之后会进行网络请求，请求完成后会更新内存缓存与磁盘。没有缓存将直接进行网络请求，请求完成后会更新内存与磁盘缓存
-   
-```java
-setRetryWhenRequestFailed(true)
-``` 是否进行重试，当请求失败的时候，默认开启，重试2次，不需要重试功能的话可关闭
-   
-```java
-setNeverExpired(false)
-```设置缓存是否永不过期
-    
+setShouldCache(true) //这个开关控制是否使用缓存的功能
 
-```java
-setTimeController
-```设置时间控制器
+setUseCacheDataAnyway(false) //是否总是使用缓存，这个开关开启后，将每次首先从内存和本地查找缓存，有的话直接使用缓存，请求会在后台执行，完成后会更新缓存。如果没有缓存将直接进行网络请求获取，完成后会更新缓存.
+  
+setUseCacheDataWhenRequestFailed(true) //是否在请求失败后使用缓存数据，无网络属于请求失败，可以保证即使没有网络，或者请求失败也有数据展示.
+  
+setUseCacheDataWhenTimeout(true) //是否在请求超时后直接使用缓存，这里的超时时间并不是网络请求的超时时间，而是我们设定一个时间，超过这个时间后，不管请求有没有完成都直接使用缓存，后台的请求完成后会自动更新缓存
+  
+setUseCacheDataWhenUnexpired(true) //是否使用缓存当缓存未过期的时候，这个开关也是经常开启的开关，每个缓存都会对应一个过期时间，先从内存查找缓存，没有的话再从磁盘查找，有缓存且未过期的话，将直接使用缓存数据，当过期之后会进行网络请求，请求完成后会更新内存缓存与磁盘。没有缓存将直接进行网络请求，请求完成后会更新内存与磁盘缓存
+
+setRetryWhenRequestFailed(true) //是否进行重试，当请求失败的时候，默认开启，重试2次，不需要重试功能的话可关闭
+   
+setNeverExpired(false) //设置缓存是否永不过期
+    
+setTimeController //设置时间控制器
+```
 
 ### Example ###
 
