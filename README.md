@@ -1,6 +1,6 @@
-## XDroidRequest ##
+## HttpRequest ##
 
-**XDroidRequest** 已更名“HttpRequest”,重构更新，高度解耦，支持了OKHttp，可自由选择，多种JSON解析器可选（GSON,Fastjson,JackSon），并能自己再拓展，对缓存模块进行了重构，以及其他模块代码优化。
+重构更新，高度解耦，支持了OKHttp，可自由选择，多种JSON解析器可选（GSON,Fastjson,JackSon），并能自己再拓展，对缓存模块进行了重构，以及其他模块代码优化。
 
 ### Provide ###
     
@@ -92,7 +92,7 @@ compile 'com.alibaba:fastjson:1.2.11' //fastjson
 
 **1.初始化，应用启动的时候进行，主要初始化缓存的路径上下文等信息。**
 
-```
+```java
 XRequest.initXRequest(getApplicationContext());
 ```   
 其他配置：   
@@ -273,7 +273,8 @@ DiskCache.INSTANCE.clear();
 **4.请求配置**：
 
 在发送请求的时候，有的重载函数需要传入一个```RequestCacheOptions```对象（见Demo项目），不需要传入此对象的重载函数内部传入的是默认的
-```RequestCacheOptions```对象，通过```RequestCacheOptions```对象控制缓存于网络数据等      
+```RequestCacheOptions```对象，通过```RequestCacheOptions```对象控制缓存于网络数据等<br> 
+     
 ```java
 HttpRequest request = new MultipartRequest.Builder()
                 .requestCacheOptions(RequestCacheOptions.buildAllCloseOptions())
@@ -281,9 +282,11 @@ HttpRequest request = new MultipartRequest.Builder()
                 .build();
 
 ```   
+
 每次请求如果需要重新指定配置，自己构造这样一个对象传入即可   
 
-```RequestCacheOptions```默认实现供参考：    
+```RequestCacheOptions```默认实现供参考：<br>   
+ 
 ```java
 public static RequestCacheOptions buildDefaultCacheOptions() {
 		RequestCacheOptions options=new RequestCacheOptions.Builder()
@@ -300,7 +303,6 @@ public static RequestCacheOptions buildDefaultCacheOptions() {
 		return options;
 	}
 ```
-
 
 **5.自定义解析方式**：
 
