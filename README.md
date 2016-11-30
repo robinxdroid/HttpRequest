@@ -288,9 +288,8 @@ DiskCache.INSTANCE.clear();
 每次请求如果需要重新指定配置，自己构造这样一个对象传入即可   
 
 ```java
-RequestCacheOptions
-```默认实现供参考：<br>   
- 
+RequestCacheOptions```默认配置供参考
+
 ```java
 public static RequestCacheOptions buildDefaultCacheOptions() {
 		RequestCacheOptions options=new RequestCacheOptions.Builder()
@@ -306,6 +305,7 @@ public static RequestCacheOptions buildDefaultCacheOptions() {
 
 		return options;
 	}
+	
 ```
 
 **5.自定义解析方式**：
