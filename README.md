@@ -361,11 +361,18 @@ Clog.closeLog();
 (3).设置请求优先级
 ```java
 HttpRequest request = new MultipartRequest.Builder()
+                .priority(Priority.HIGH)
+                ...
+                .build();
+```
+(4).设置重试策略
+```java
+HttpRequest request = new MultipartRequest.Builder()
                 .retryPolicy(new DefaultRetryPolicyImpl(DefaultRetryPolicyImpl.DEFAULT_TIMEOUT_MS, DefaultRetryPolicyImpl.DEFAULT_MAX_RETRIES, DefaultRetryPolicyImpl.DEFAULT_BACKOFF_MULT))
                 ...
                 .build();
 ```
-(3).切换OKHttp
+(5).切换OKHttp
 ```java
 XRequest.INSTANCE.setStack(new OkHttpStack());
 HttpRequest request = new MultipartRequest.Builder()
@@ -373,7 +380,7 @@ HttpRequest request = new MultipartRequest.Builder()
                 ...
                 .build();
 ```
-(4).切换解析器
+(6).切换解析器
 ```java
 XRequest.INSTANCE.setStack(new OkHttpStack());
 HttpRequest request = new MultipartRequest.Builder()
