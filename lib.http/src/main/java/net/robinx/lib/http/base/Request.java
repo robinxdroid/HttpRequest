@@ -502,13 +502,13 @@ public abstract class Request<T> implements IRequest<T>, IResponseDelivery<T>, C
 
         // write memory cache
         CacheData<Entry<T>> cacheData = MemoryCache.INSTANCE.get(getCacheKey());
+        Entry<T> memoryEntry = new Entry<T>(result, headers);
+        CacheData<Entry<T>> finalMemoryCacheData = new CacheData<Entry<T>>(memoryEntry, mRequestCacheOptions.getTimeController().getExpirationTime(), System.currentTimeMillis(), getRequestCacheOptions().isNeverExpired());
         if (cacheData != null) {
-            cacheData.setWriteTime(System.currentTimeMillis());
+            MemoryCache.INSTANCE.update(cacheKey,finalMemoryCacheData);
             CLog.d("cache-memory-update");
         } else {
-            Entry<T> entry = new Entry<T>(result, headers);
-            cacheData = new CacheData<Entry<T>>(entry, mRequestCacheOptions.getTimeController().getExpirationTime(), System.currentTimeMillis(), getRequestCacheOptions().isNeverExpired());
-            MemoryCache.INSTANCE.put(cacheKey, cacheData);
+            MemoryCache.INSTANCE.put(cacheKey, finalMemoryCacheData);
             CLog.d("cache-memory-written");
         }
         // write disk cache
